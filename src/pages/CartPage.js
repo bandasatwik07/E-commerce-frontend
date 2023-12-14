@@ -4,7 +4,7 @@ import Cart from '../features/cart/Cart'
 const CartPage = () => {
   return (
     <>
-       <Cart></Cart>
+       <Cart>hi</Cart>
     </>
   )
 }
