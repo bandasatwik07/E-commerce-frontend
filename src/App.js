@@ -3,6 +3,7 @@ import './App.css';
 import Home from './pages/Home';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import Logout from './features/auth/components/Logout';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -18,6 +19,13 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLoggedInUser } from './features/auth/authSlice';
 import { fetchItemsByUserIdAsync } from './features/cart/cartSlice';
+import { PageNotFound } from './pages/404Page';
+import { OrderSuccessPage } from './pages/OrderSuccessPage';
+import {UserOrdersPage} from './pages/UserOrdersPage';
+import UserProfile from './features/user/components/UserProfile';
+import UserProfilePage from './pages/UserProfilePage';
+import { fetchLoggedInUserAsync } from './features/user/userSlice';
+import ForgotPasswordPage from './pages/ForgotPasswrodPage';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -59,6 +67,43 @@ const router = createBrowserRouter([
       </Protected>
     ),
   },
+  {
+    path: '/order-success/:id',
+    element: (
+      <OrderSuccessPage></OrderSuccessPage>
+    ),
+  },
+  {
+    path: '/orders',
+    element: (
+      <UserOrdersPage></UserOrdersPage>
+      // we will add Page later right now using component directly.
+    ),
+  },
+  {
+    path: '/profile',
+    element: (
+      <UserProfilePage></UserProfilePage>
+    ),
+  },
+  {
+    path: '/logout',
+    element: (
+      <Logout></Logout>
+    ),
+  },
+  {
+    path: '/forgot-password',
+    element: (
+      <ForgotPasswordPage></ForgotPasswordPage>
+    ),
+  },
+  {
+    path: '*',
+    element: (
+      <PageNotFound></PageNotFound>
+    ),
+  },
 ]);
 
 function App() {
@@ -69,6 +114,7 @@ function App() {
   useEffect(()=>{
     if(user){
       dispatch(fetchItemsByUserIdAsync(user.id))
+      dispatch(fetchLoggedInUserAsync(user.id))
     }
   },[dispatch, user])
 
