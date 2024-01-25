@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchProductsByFilters,fetchProductsById, fetchBrands,fetchCategories } from './productAPI';
+import { fetchProductsByFilters,fetchProductsById, fetchBrands,fetchCategories,createProduct,updateProduct } from './productAPI';
 
 const initialState = {
   products : [],
@@ -21,7 +21,7 @@ export const  fetchProductsByFiltersAsync = createAsyncThunk(
   }
 );
 
-export const  fetchProductsByIdAsync = createAsyncThunk(
+export const  fetchProductByIdAsync = createAsyncThunk(
   'products/fetchProductsById',
   async (id) => {
     const response = await fetchProductsById(id);
@@ -46,6 +46,22 @@ export const  fetchCategoriesAsync = createAsyncThunk(
   }
 );
 
+export const  createProductAsync = createAsyncThunk(
+  'products/createProduct',
+  async (product) => {
+    const response = await createProduct(product);
+    return response.data;
+  }
+);
+
+export const  updateProductAsync = createAsyncThunk(
+  'products/update',
+  async (update) => {
+    const response = await updateProduct(update);
+    return response.data;
+  }
+);
+
 export const productSlice = createSlice({
   name: 'product',
   //The name field is used to generate action types, reducer names, and selector names.
@@ -53,8 +69,8 @@ export const productSlice = createSlice({
 
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    clearSelectedProduct: (state) => {
+      state.selectedProduct = null;
     },
   },
   //The reducers field lets us define reducers and generate associated actions and action creators.
@@ -90,17 +106,33 @@ export const productSlice = createSlice({
         state.status = 'idle';
         state.categories = action.payload;
       })
-      .addCase(fetchProductsByIdAsync.pending, (state) => {
+      .addCase(fetchProductByIdAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(fetchProductsByIdAsync.fulfilled, (state, action) => {
+      .addCase(fetchProductByIdAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.selectedProduct = action.payload;
-      });
+      })
+      .addCase(createProductAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(createProductAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.products.push(action.payload);
+      })
+      .addCase(updateProductAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateProductAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        const index = state.products.findIndex(product=>product.id===action.payload.id)
+        state.products[index]=(action.payload);
+      })
+      ;
   },
 }); 
 
-export const { increment } = productSlice.actions;
+export const { clearSelectedProduct } = productSlice.actions;
 //actions are functions in the reducer logic that trigger changes to the state.
 //The action creator is the function that returns the action object.
 //The action object is the actual action being dispatched.
