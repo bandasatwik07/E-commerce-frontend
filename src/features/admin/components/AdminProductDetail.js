@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
 import { useDispatch,useSelector } from 'react-redux'
-import { fetchProductByIdAsync, selectProductById } from '../productSlice'
+import { fetchProductByIdAsync, selectProductById } from '../../product-list/productSlice'
 import { selectLoggedInUser } from '../../auth/authSlice'
 import { useParams } from 'react-router-dom'
 import { addToCart } from '../../cart/cartAPI'
@@ -38,7 +38,7 @@ function classNames(...classes) {
 
 
 
-export default function ProductDetail() {
+export default function AdminProductDetail() {
   const [selectedColor, setSelectedColor] = useState(colors[0])
   const [selectedSize, setSelectedSize] = useState(sizes[2])
   const user = useSelector(selectLoggedInUser)
@@ -290,7 +290,8 @@ export default function ProductDetail() {
               <h2 className="text-sm font-medium text-gray-900">Details</h2>
 
               <div className="mt-4 space-y-6">
-                <p className="text-sm text-gray-600">{product.description}</p>
+                <p className="text-sm text-gray-600">{product.description}
+                </p>
               </div>
             </div>
           </div>
