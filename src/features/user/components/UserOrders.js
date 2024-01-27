@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchLoggedInUserOrderAsync,selectUserOrders,selectUserInfo } from '../userSlice';
+import { discountedPrice } from '../../../app/constants';
 
 
 export default function UserOrders() {
@@ -20,10 +21,15 @@ export default function UserOrders() {
           <div>
             <div>
               <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
+                
                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                  <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">
-                    Items in order
+                  <h1 className="text-5xl my-5 mt-4 font-bold tracking-tight text-gray-900">
+                    Order #{order.id}
                   </h1>
+                  <h1 className="text-xl my-5 mt-4 font-bold tracking-tight text-red-600">
+                    Order Status: {order.status}
+                  </h1>
+
                   <div className="flow-root">
                     <ul role="list" className="-my-6 divide-y divide-gray-200">
                       {order.items.map((item) => (
@@ -41,7 +47,7 @@ export default function UserOrders() {
                                 <h3>
                                   <a href={item.href}>{item.title}</a>
                                 </h3>
-                                <p className="ml-4">${item.price}</p>
+                                <p className="ml-4">${discountedPrice(item)}</p>
                               </div>
                               <p className="mt-1 text-sm text-gray-500">
                                 {item.brand}
