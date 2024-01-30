@@ -899,7 +899,7 @@
         "pinCode": "500035"
       },
       "paymentMethod": "cash",
-      "status": "cancelled",
+      "status": "dispatched",
       "id": 1
     },
     {
@@ -1632,6 +1632,68 @@
       "paymentMethod": "cash",
       "status": "pending",
       "id": 10
+    },
+    {
+      "items": [
+        {
+          "title": "Samsung Universe 9",
+          "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
+          "price": 1249,
+          "discountPercentage": 15.46,
+          "rating": 4.09,
+          "stock": 36,
+          "brand": "Samsung",
+          "category": "smartphones",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/3/thumbnail.jpg",
+          "images": [
+            "https://cdn.dummyjson.com/product-images/3/1.jpg"
+          ],
+          "deleted": true,
+          "quantity": 1,
+          "user": 1,
+          "id": 1
+        }
+      ],
+      "totalAmount": 1056,
+      "totalItems": 1,
+      "user": {
+        "email": "banda@gmail.com",
+        "password": "Qwerty123",
+        "role": "user",
+        "addresses": [
+          {
+            "name": "Banda Satwik",
+            "email": "bandasatwik4@gmail.com",
+            "phone": "9177620708",
+            "street": "hno-11-9-283/1",
+            "city": "hyderabad",
+            "state": "telangana",
+            "pinCode": "500035"
+          },
+          {
+            "name": "DJ Satwik",
+            "email": "bandasatw@gmail.com",
+            "phone": "8177621118",
+            "street": "hno-11-9-286/1",
+            "city": "hyderabad",
+            "state": "telangana",
+            "pinCode": "500035"
+          }
+        ],
+        "id": 1
+      },
+      "selectedAddress": {
+        "name": "Banda Satwik",
+        "email": "bandasatwik4@gmail.com",
+        "phone": "9177620708",
+        "street": "hno-11-9-283/1",
+        "city": "hyderabad",
+        "state": "telangana",
+        "pinCode": "500035"
+      },
+      "paymentMethod": "cash",
+      "status": "pending",
+      "id": 11
     }
   ]
 }
