@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { ITEMS_PER_PAGE, discountedPrice } from '../../../app/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllOrdersAsync, selectOrders, selectTotalOrders, updateOrderAsync } from '../../order/orderSlice';
-import { PencilIcon, EyeIcon } from '@heroicons/react/24/outline'
+import { PencilIcon, EyeIcon, ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/outline'
 import { Pagination } from '../../common/Pagination';
 
 export const AdminOrders = () => {
@@ -11,6 +11,7 @@ export const AdminOrders = () => {
     const orders = useSelector(selectOrders);
     const totalOrders = useSelector(selectTotalOrders);
     const [editableOrderId, setEditableOrderId] = useState(-1);
+    const [sort,setSort]= useState({});
 
     const handleEdit = (item) => {
         setEditableOrderId(item.id);
@@ -39,11 +40,23 @@ export const AdminOrders = () => {
         setEditableOrderId(-1);
     }
 
+    const handlePage = (page) => {
+        const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
+        dispatch(fetchAllOrdersAsync(sort,pagination));
+        setPage(page);
+        
+    }
+
+    const handleSort = (sortOption) => {
+        const sort ={_sort : sortOption.sort, _order: sortOption.order};
+        setSort(sort);
+    }
+
 
     useEffect(() => {
         const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
-        dispatch(fetchAllOrdersAsync(pagination));
-    }, [dispatch, page]);
+        dispatch(fetchAllOrdersAsync({sort,pagination}));
+    }, [dispatch, page, sort]);
 
 
 
@@ -56,11 +69,28 @@ export const AdminOrders = () => {
                             <table className="min-w-max w-full table-auto">
                                 <thead>
                                     <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                        <th className="py-3 px-6 text-left">Order#</th>
+                                        <th className="py-3 px-6 text-left" 
+                                        onClick={(e)=>handleSort({
+                                            sort:'id',
+                                            order:sort?._order==='asc'?'desc':'asc'
+                                        })}>Order#{' '}
+                                        {sort._sort==='id' && (sort._order==='asc'?(<ArrowUpIcon className='w-4 h-4 inline'></ArrowUpIcon>):(<ArrowDownIcon className='w-4 h-4 inline'></ArrowDownIcon>))}
+                                        </th>
+                                        
                                         <th className="py-3 px-6 text-left">Items</th>
-                                        <th className="py-3 px-6 text-center">Total Amount</th>
+                                        
+                                        <th className="py-3 px-6 text-left" 
+                                        onClick={(e)=>handleSort({
+                                            sort:'totalAmount',
+                                            order:sort?._order==='asc'?'desc':'asc'
+                                        })}>totalAmount{' '}
+                                        {sort._sort==='totalAmount' && (sort._order==='asc'?(<ArrowUpIcon className='w-4 h-4 inline'></ArrowUpIcon>):(<ArrowDownIcon className='w-4 h-4 inline'></ArrowDownIcon>))}
+                                        </th>
+                                        
                                         <th className="py-3 px-6 text-center">Shipping Address</th>
+                                        
                                         <th className="py-3 px-6 text-center">Status</th>
+                                        
                                         <th className="py-3 px-6 text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -143,7 +173,7 @@ export const AdminOrders = () => {
                 </div>
 
                 <Pagination page={page} setPage={setPage} handlePage={handlePage}
-                totalItems={totalItems} ></Pagination>
+                totalItems={totalOrders} ></Pagination>
 
             </div>
 
