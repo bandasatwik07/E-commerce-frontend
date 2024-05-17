@@ -26,7 +26,9 @@ export const fetchItemsByUserIdAsync = createAsyncThunk(
 export const updateCartAsync = createAsyncThunk(
   'cart/updateCart',
   async (update) => {
+    console.log("nani in slice",update.id)
     const response = await updateCart(update);
+    console.log("nani in slice",response.data)
     return response.data;
   }
 );
@@ -42,8 +44,8 @@ export const resetCartAsync = createAsyncThunk(
 
 export const deleteItemFromCartAsync = createAsyncThunk(
   'cart/deleteItemFromCart',
-  async (itemId) => {
-    const response = await deleteItemFromCart(itemId);
+  async (id) => {
+    const response = await deleteItemFromCart(id);
     return response.data;
   }
 );
@@ -99,8 +101,11 @@ export const counterSlice = createSlice({
   },
 });
 
+
 export const { increment } = counterSlice.actions;
 
 export const selectItems = (state) => state.cart.items;
+
+export const selectCartStatus = (state) => state.cart.status;
 
 export default counterSlice.reducer;

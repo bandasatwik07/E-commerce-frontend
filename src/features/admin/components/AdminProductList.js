@@ -184,8 +184,8 @@ export default function AdminProductList() {
                   <div className="lg:col-span-3">
                     <div>
                       <Link
-                        to="/admin/product-form"
-                        className="mt-2 mx-12 my-5 items-center justify-center rounded-md border border-transparent bg-green-600 px-5 py-3 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2">
+                        to="product-form"
+                        className="mt-2 mx-12 my-5 items-center justify-center rounded-md border border-transparent   bg-green-600 px-5 py-3 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2">
                         Add New Product
                       </Link>
                     </div>
@@ -419,6 +419,11 @@ const ProductGrid = ({ products }) => {
                         product deleted
                       </p>
                     </div>}
+                    {product.stock <= 0 && (
+                      <div>
+                        <p className="text-sm text-red-400">out of stock</p>
+                      </div>
+                    )}
                   </div>
                 </Link>
                 <div>

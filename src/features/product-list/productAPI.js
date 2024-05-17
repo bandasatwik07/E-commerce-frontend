@@ -1,12 +1,4 @@
 
-// export function fetchAllProducts() {
-//   return new Promise(async(resolve) =>{
-//     const response = await fetch('http://localhost:8080/products')
-//     const data = await response.json()
-//     resolve({data});
-//   }
-//   );
-// }
 
 export function fetchProductsById(id) {
   return new Promise(async(resolve) =>{
@@ -72,7 +64,7 @@ export function fetchProductsByFilters(filter,sort,pagination) {
 
 export function fetchCategories() {
   return new Promise(async(resolve) =>{
-    const response = await fetch('http://localhost:8080/categories')
+    const response = await fetch('http://localhost:8080/categorys')
     const data = await response.json()
     resolve({data});
   }
