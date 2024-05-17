@@ -28,23 +28,28 @@ export function updateCart(update) {
       body: JSON.stringify(update),
       headers: { 'content-type': 'application/json' },
     });
+    console.log("nani",update.id)
     const data = await response.json();
     // TODO: on server it will only return some info of user (not password)
     resolve({ data });
   });
 }
 
-export function deleteItemFromCart(itemId) {
+export function deleteItemFromCart(id) {
   return new Promise(async (resolve) => {
-    const response = await fetch('http://localhost:8080/cart/' + itemId, {
+    console.log("nani123",id);
+    const response = await fetch('http://localhost:8080/cart/' + id, {
       method: 'DELETE',
       headers: { 'content-type': 'application/json' },
     });
+    console.log("nani456",id);
     const data = await response.json();
+    resolve({ data: { id: id } });
+    console.log("nani789",data);
     // TODO: on server it will only return some info of user (not password)
-    resolve({ data: { id: itemId } });
   });
 }
+
 export function resetCart(userId) {
   // get all items of user's cart - and then delete each
   return new Promise(async (resolve) => {

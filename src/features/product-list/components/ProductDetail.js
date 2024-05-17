@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
-import { useDispatch,useSelector } from 'react-redux'
-import { fetchProductByIdAsync, selectProductById } from '../productSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchProductByIdAsync, selectProductById, selectProductListStatus } from '../productSlice'
 import { selectLoggedInUser } from '../../auth/authSlice'
 import { useParams } from 'react-router-dom'
 import { addToCart } from '../../cart/cartAPI'
 import { addToCartAsync, selectItems } from '../../cart/cartSlice'
 import { discountedPrice } from '../../../app/constants'
+import { useAlert } from 'react-alert'
+import { Grid } from 'react-loader-spinner'
 
 const colors = [
   { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
@@ -46,25 +48,41 @@ export default function ProductDetail() {
   const product = useSelector(selectProductById)
   const dispatch = useDispatch()
   const params = useParams()
-  const items=useSelector(selectItems)
+  const items = useSelector(selectItems)
+
+  const status = useSelector(selectProductListStatus);
   useEffect(() => {
     dispatch(fetchProductByIdAsync(params.id))
   }, [dispatch, params.id])
-  
+
+  const alert = useAlert();
   const handleCart = (e) => {
     e.preventDefault();
-    if(items.findIndex(item=>item.productId===product.id)<0){
-      const newItem = {...product, productId: product.id ,quantity: 1, user: user.id}
-    delete newItem['id'];
-    dispatch(addToCartAsync(newItem));
+    if (items.findIndex(item => item.product.id === product.id) < 0) {
+      const newItem = { product: product.id, quantity: 1, user: user.id }
+      dispatch(addToCartAsync(newItem));
+      alert.show("The Item is already added to cart");
     }
-    else{
+    else {
+      alert.show("The Item is already added to cart");
+    }
 
-    }
-    
   }
   return (
     <div className="bg-white">
+      {
+        status === 'loading' ? (
+          <Grid
+            height="80"
+            width="80"
+            color="rgb(75,70,229)"
+            ariaLabel="grid-loading"
+            radius="12.5"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />) : (null)
+      }
       {product && <div className="pt-6">
         <nav aria-label="Breadcrumb">
           <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -142,7 +160,7 @@ export default function ProductDetail() {
             <p className="text-3xl line-through tracking-tight text-gray-900">${product.price}</p>
 
             <p className="text-3xl tracking-tight text-gray-900">${
-            discountedPrice(product)}</p>
+              discountedPrice(product)}</p>
 
             {/* Reviews */}
             <div className="mt-6">

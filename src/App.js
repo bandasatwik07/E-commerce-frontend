@@ -21,7 +21,7 @@ import { selectLoggedInUser } from './features/auth/authSlice';
 import { fetchItemsByUserIdAsync } from './features/cart/cartSlice';
 import { PageNotFound } from './pages/404Page';
 import { OrderSuccessPage } from './pages/OrderSuccessPage';
-import {UserOrdersPage} from './pages/UserOrdersPage';
+import { UserOrdersPage } from './pages/UserOrdersPage';
 import UserProfile from './features/user/components/UserProfile';
 import UserProfilePage from './pages/UserProfilePage';
 import { fetchLoggedInUserAsync } from './features/user/userSlice';
@@ -32,6 +32,16 @@ import { ProductForm } from './features/admin/components/ProductForm';
 import { AdminProductFormPage } from './pages/AdminProductFormPage';
 import { AdminProductDetailPage } from './pages/AdminProductDetailPage';
 import { AdminOrders } from './features/admin/components/AdminOrders';
+import { positions, Provider } from "react-alert";
+import AlertTemplate from 'react-alert-template-basic';
+
+const options = {
+  timeout: 5000,
+  position: positions.BOTTOM_LEFT
+};
+
+
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -160,16 +170,18 @@ function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
 
-  useEffect(()=>{
-    if(user){
+  useEffect(() => {
+    if (user) {
       dispatch(fetchItemsByUserIdAsync(user.id))
       dispatch(fetchLoggedInUserAsync(user.id))
     }
-  },[dispatch, user])
+  }, [dispatch, user])
 
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      <Provider template={AlertTemplate} {...options}>
+        <RouterProvider router={router} />
+      </Provider>
     </div>
   );
 }

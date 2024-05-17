@@ -8,6 +8,7 @@ import {
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectItems } from '../cart/cartSlice';
+// import {logo} from '';
 import { selectLoggedInUser } from '../auth/authSlice';
 
 const navigation = [
