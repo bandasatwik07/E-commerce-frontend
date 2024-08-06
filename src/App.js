@@ -17,7 +17,7 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import Protected from './features/auth/components/Protected';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLoggedInUser } from './features/auth/authSlice';
+import { checkAuthAsync, selectLoggedInUser, selectUserChecked } from './features/auth/authSlice';
 import { fetchItemsByUserIdAsync } from './features/cart/cartSlice';
 import { PageNotFound } from './pages/404Page';
 import { OrderSuccessPage } from './pages/OrderSuccessPage';
@@ -34,6 +34,7 @@ import { AdminProductDetailPage } from './pages/AdminProductDetailPage';
 import { AdminOrders } from './features/admin/components/AdminOrders';
 import { positions, Provider } from "react-alert";
 import AlertTemplate from 'react-alert-template-basic';
+import StripeCheckout from './pages/StripeCheckout';
 
 const options = {
   timeout: 5000,
@@ -146,6 +147,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: '/stripe-checkout/',
+    element: (
+      <Protected>
+        <StripeCheckout></StripeCheckout>
+      </Protected>
+    ),
+  },
+  {
     path: '/logout',
     element: (
       <Logout></Logout>
@@ -169,19 +178,27 @@ function App() {
 
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
+  const userChecked = useSelector(selectUserChecked);
+
+
+  useEffect(()=>{
+    dispatch(checkAuthAsync())
+  },[dispatch])
 
   useEffect(() => {
     if (user) {
-      dispatch(fetchItemsByUserIdAsync(user.id))
-      dispatch(fetchLoggedInUserAsync(user.id))
+      dispatch(fetchItemsByUserIdAsync())
+      dispatch(fetchLoggedInUserAsync())
     }
   }, [dispatch, user])
 
   return (
     <div className="App">
-      <Provider template={AlertTemplate} {...options}>
-        <RouterProvider router={router} />
-      </Provider>
+      {userChecked && (
+          <Provider template={AlertTemplate} {...options}>
+            <RouterProvider router={router} />
+          </Provider>
+        )}
     </div>
   );
 }

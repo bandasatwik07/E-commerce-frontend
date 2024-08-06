@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { createProductAsync, updateProductAsync, fetchProductByIdAsync, selectBrands, selectCategories, selectProductById } from '../../product-list/productSlice';
 import { clearSelectedProduct } from '../../product-list/productSlice';
 import Modal from '../../common/Modal';
+import { useAlert } from 'react-alert';
 
 
 export const ProductForm = () => {
@@ -26,6 +27,7 @@ export const ProductForm = () => {
   const params = useParams();
   const selectedProduct = useSelector(selectProductById);
   const [openModal, setOpenModal] = useState(false);
+  const alert = useAlert();
 
   useEffect(() => {
     console.log(1)
@@ -86,6 +88,7 @@ export const ProductForm = () => {
             product.id = params.id;
             product.rating = selectedProduct.rating || 0;
             dispatch(updateProductAsync(product));
+            alert.show("The Product is updated succesfully");
             reset();
           } else {
             dispatch(createProductAsync(product));
@@ -98,7 +101,7 @@ export const ProductForm = () => {
 
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              {selectedProduct?.deleted && <h2 className="text-red-500 sm:col-span-6">This product is deleted</h2>}
+              {selectedProduct && selectedProduct?.deleted && <h2 className="text-red-500 sm:col-span-6">This product is deleted</h2>}
               <div className="sm:col-span-4">
                 <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
                   Product Name
@@ -494,7 +497,7 @@ export const ProductForm = () => {
         </div>
       </form>
 
-      <Modal
+      {selectedProduct &&<Modal
         title={`Delete ${selectedProduct?.title}`}
         message="Are you sure you want to delete this Product?"
         dangerOption="Delete"
@@ -504,7 +507,7 @@ export const ProductForm = () => {
         showModal={openModal}
       >
       </Modal>
-
+      }
     </div>
   )
 }

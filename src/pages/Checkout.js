@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLoggedInUser,updateUserAsync } from '../features/user/userSlice'
+import { selectLoggedInUser, updateUserAsync } from '../features/user/userSlice'
 import { selectItems, deleteItemFromCartAsync, updateCartAsync } from '../features/cart/cartSlice'
 import { createOrderAsync, selectCurrentOrder } from '../features/order/orderSlice'
 import { useForm } from 'react-hook-form'
@@ -13,8 +13,8 @@ const Checkout = () => {
     const [open, setOpen] = useState(true);
     const user = useSelector(selectUserInfo);
 
-    const [selectedAddress,setSelectedAddress] = useState(null);
-    const [paymentMethod,setPaymentMethod] = useState('cash');
+    const [selectedAddress, setSelectedAddress] = useState(null);
+    const [paymentMethod, setPaymentMethod] = useState('cash');
 
     const {
         register,
@@ -30,33 +30,43 @@ const Checkout = () => {
     const totalItems = items.reduce((total, item) => item.quantity + total, 0)
 
     const handleQuantity = (e, item) => {
-        dispatch(updateCartAsync({ id:item.id, quantity: +e.target.value }))
+        dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }))
     }
     const handleRemove = (e, itemId) => {
         dispatch(deleteItemFromCartAsync({ itemId }))
     }
-    const handleAddress =(e)=>{
+    const handleAddress = (e) => {
         // console.log(e.target.value);
         setSelectedAddress(user.addresses[e.target.value]);
         // console.log(user.addresses[e.target.value]);
     }
-    const handlePayment =(e)=>{
+    const handlePayment = (e) => {
         console.log(e.target.value);
         setPaymentMethod(e.target.value);
     }
-    const handleOrder =(e)=>{
-        const order ={items, totalAmount, totalItems, user:user.id, selectedAddress, paymentMethod, status:'pending'}
+    const handleOrder = (e) => {
+        const order = { items, totalAmount, totalItems, user: user.id, selectedAddress, paymentMethod, status: 'pending' }
         dispatch(createOrderAsync(order));
-        
+
     }
 
 
 
     return (
         <>
-            {items.length === 0 && <Navigate to='/' replace={true}></Navigate>}
-            {currentOrder && <Navigate to={`/order-success/${currentOrder.id}`} replace={true}></Navigate>}
-
+            {!items.length && <Navigate to="/" replace={true}></Navigate>}
+            {currentOrder && currentOrder.paymentMethod === 'cash' && (
+                <Navigate
+                    to={`/order-success/${currentOrder.id}`}
+                    replace={true}
+                ></Navigate>
+            )}
+            {currentOrder && currentOrder.paymentMethod === 'card' && (
+                <Navigate
+                    to={`/stripe-checkout/`}
+                    replace={true}
+                ></Navigate>
+            )}
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
                     <div className="lg:col-span-3 px-4 py-12">
@@ -75,7 +85,7 @@ const Checkout = () => {
                                 <div className="border-b border-gray-900/10 pb-12">
                                     <h2 className="text-4xl font-semibold leading-7 text-gray-900">Personal Information</h2>
                                     <p className="mt-1 text-sm leading-6 text-gray-600">
-                                        
+
                                         Use a permanent address where you can receive mail.</p>
 
                                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -208,7 +218,7 @@ const Checkout = () => {
                                     </p>
                                     <ul role="list" className=" ">
 
-                                        {user.addresses.map((address,index) => (
+                                        {user.addresses.map((address, index) => (
                                             <div className="py-2">
                                                 <li key={index} className="flex border-solid border-2 border-gray-200 justify-between gap-x-6 px-3 py-5">
                                                     <div className="flex min-w-0 gap-x-4">
@@ -246,10 +256,10 @@ const Checkout = () => {
                                                         onChange={handlePayment}
                                                         value="cash"
                                                         name="payments"
-                                                        checked={paymentMethod==='cash'}
+                                                        checked={paymentMethod === 'cash'}
                                                         type="radio"
                                                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                        />
+                                                    />
                                                     <label htmlFor="cashpayment" className="block text-sm font-medium leading-6 text-gray-900">
                                                         Cash Payment
                                                     </label>
@@ -258,7 +268,7 @@ const Checkout = () => {
                                                     <input
                                                         id="cardpayment"
                                                         onChange={handlePayment}
-                                                        checked={paymentMethod==='card'}
+                                                        checked={paymentMethod === 'card'}
                                                         value="card"
                                                         name="payments"
                                                         type="radio"
@@ -355,7 +365,7 @@ const Checkout = () => {
                                 </p>
                                 <div className="mt-6">
                                     <div
-                                    onClick={(e)=>handleOrder(e)}
+                                        onClick={(e) => handleOrder(e)}
                                         className="flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                                     >
                                         Order Now
