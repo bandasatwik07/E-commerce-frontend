@@ -91,6 +91,10 @@ export default function ProductList() {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
     dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }))
   }, [dispatch, filter, sort, page])
+  
+  useEffect(() => {
+    dispatch(fetchProductsByFiltersAsync({  }))
+  }, [])
 
   useEffect(() => {
     setPage(1)
