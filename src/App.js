@@ -17,7 +17,7 @@ import {
   selectUserChecked,
 } from './features/auth/authSlice';
 import { fetchItemsByUserIdAsync } from './features/cart/cartSlice';
-import PageNotFound from './pages/404';
+import PageNotFound from './pages/404Page';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import UserOrdersPage from './pages/UserOrdersPage';
 import UserProfilePage from './pages/UserProfilePage';
