@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 import { addToCart } from '../../cart/cartAPI'
 import { addToCartAsync, selectItems } from '../../cart/cartSlice'
 import { discountedPrice } from '../../../app/constants'
-import { useAlert } from 'react-alert'
+// import { useAlert } from 'react-alert'
 import { Grid } from 'react-loader-spinner'
 
 const colors = [
@@ -54,16 +54,16 @@ export default function ProductDetail() {
     dispatch(fetchProductByIdAsync(params.id))
   }, [dispatch, params.id])
 
-  const alert = useAlert();
+  // const alert = useAlert();
   const handleCart = (e) => {
     e.preventDefault();
     if (items.findIndex(item => item.product.id === product.id) < 0) {
       const newItem = { product: product.id, quantity: 1 }
       dispatch(addToCartAsync(newItem));
-      alert.success("The Item is already added to cart");
+      // alert.success("The Item is already added to cart");
     }
     else {
-      alert.show("The Item is already added to cart");
+      // alert.show("The Item is already added to cart");
     }
 
   }

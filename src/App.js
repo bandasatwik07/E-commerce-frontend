@@ -3,45 +3,41 @@ import './App.css';
 import Home from './pages/Home';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import Logout from './features/auth/components/Logout';
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link,
-} from 'react-router-dom';
-import Cart from './features/cart/Cart';
+
+import { createBrowserRouter, Link, RouterProvider } from 'react-router-dom';
 import CartPage from './pages/CartPage';
 import Checkout from './pages/Checkout';
 import ProductDetailPage from './pages/ProductDetailPage';
 import Protected from './features/auth/components/Protected';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkAuthAsync, selectLoggedInUser, selectUserChecked } from './features/auth/authSlice';
+import {
+  checkAuthAsync,
+  selectLoggedInUser,
+  selectUserChecked,
+} from './features/auth/authSlice';
 import { fetchItemsByUserIdAsync } from './features/cart/cartSlice';
-import { PageNotFound } from './pages/404Page';
-import { OrderSuccessPage } from './pages/OrderSuccessPage';
-import { UserOrdersPage } from './pages/UserOrdersPage';
-import UserProfile from './features/user/components/UserProfile';
+import PageNotFound from './pages/404';
+import OrderSuccessPage from './pages/OrderSuccessPage';
+import UserOrdersPage from './pages/UserOrdersPage';
 import UserProfilePage from './pages/UserProfilePage';
 import { fetchLoggedInUserAsync } from './features/user/userSlice';
-import ForgotPasswordPage from './pages/ForgotPasswrodPage';
+import Logout from './features/auth/components/Logout';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ProtectedAdmin from './features/auth/components/ProtectedAdmin';
 import AdminHome from './pages/AdminHome';
-import { ProductForm } from './features/admin/components/ProductForm';
-import { AdminProductFormPage } from './pages/AdminProductFormPage';
-import { AdminProductDetailPage } from './pages/AdminProductDetailPage';
-import { AdminOrders } from './features/admin/components/AdminOrders';
-import { positions, Provider } from "react-alert";
-import AlertTemplate from 'react-alert-template-basic';
+import AdminProductDetailPage from './pages/AdminProductDetailPage';
+import AdminProductFormPage from './pages/AdminProductFormPage';
+import AdminOrdersPage from './pages/AdminOrdersPage';
+// import { positions, Provider } from 'react-alert';
+// import AlertTemplate from 'react-alert-template-basic';
 import StripeCheckout from './pages/StripeCheckout';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 const options = {
   timeout: 5000,
-  position: positions.BOTTOM_LEFT
+  position: positions.BOTTOM_LEFT,
 };
-
-
 
 const router = createBrowserRouter([
   {
@@ -85,7 +81,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/ProductDetail/:id',
+    path: '/product-detail/:id',
     element: (
       <Protected>
         <ProductDetailPage></ProductDetailPage>
@@ -104,17 +100,7 @@ const router = createBrowserRouter([
     path: '/admin/product-form',
     element: (
       <ProtectedAdmin>
-        <AdminProductFormPage>
-        </AdminProductFormPage>
-      </ProtectedAdmin>
-    ),
-  },
-  {
-    path: '/admin/product-form/edit/:id',
-    element: (
-      <ProtectedAdmin>
-        <AdminProductFormPage>
-        </AdminProductFormPage>
+        <AdminProductFormPage></AdminProductFormPage>
       </ProtectedAdmin>
     ),
   },
@@ -122,28 +108,40 @@ const router = createBrowserRouter([
     path: '/admin/orders',
     element: (
       <ProtectedAdmin>
-        <AdminOrders>
-        </AdminOrders>
+        <AdminOrdersPage></AdminOrdersPage>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: '/admin/product-form/edit/:id',
+    element: (
+      <ProtectedAdmin>
+        <AdminProductFormPage></AdminProductFormPage>
       </ProtectedAdmin>
     ),
   },
   {
     path: '/order-success/:id',
     element: (
-      <OrderSuccessPage></OrderSuccessPage>
+      <Protected>
+        <OrderSuccessPage></OrderSuccessPage>{' '}
+      </Protected>
     ),
   },
   {
-    path: '/orders',
+    path: '/my-orders',
     element: (
-      <UserOrdersPage></UserOrdersPage>
-      // we will add Page later right now using component directly.
+      <Protected>
+        <UserOrdersPage></UserOrdersPage>{' '}
+      </Protected>
     ),
   },
   {
     path: '/profile',
     element: (
-      <UserProfilePage></UserProfilePage>
+      <Protected>
+        <UserProfilePage></UserProfilePage>{' '}
+      </Protected>
     ),
   },
   {
@@ -156,50 +154,51 @@ const router = createBrowserRouter([
   },
   {
     path: '/logout',
-    element: (
-      <Logout></Logout>
-    ),
+    element: <Logout></Logout>,
   },
   {
     path: '/forgot-password',
-    element: (
-      <ForgotPasswordPage></ForgotPasswordPage>
-    ),
+    element: <ForgotPasswordPage></ForgotPasswordPage>,
+  },
+  {
+    path: '/reset-password',
+    element: <ResetPasswordPage></ResetPasswordPage>,
   },
   {
     path: '*',
-    element: (
-      <PageNotFound></PageNotFound>
-    ),
+    element: <PageNotFound></PageNotFound>,
   },
 ]);
 
 function App() {
-
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
   const userChecked = useSelector(selectUserChecked);
 
-
-  useEffect(()=>{
-    dispatch(checkAuthAsync())
-  },[dispatch])
+  useEffect(() => {
+    dispatch(checkAuthAsync());
+  }, [dispatch]);
 
   useEffect(() => {
     if (user) {
-      dispatch(fetchItemsByUserIdAsync())
-      dispatch(fetchLoggedInUserAsync())
+      dispatch(fetchItemsByUserIdAsync());
+      // we can get req.user by token on backend so no need to give in front-end
+      dispatch(fetchLoggedInUserAsync());
     }
-  }, [dispatch, user])
+  }, [dispatch, user]);
 
   return (
-    <div className="App">
-      {userChecked && (
-          <Provider template={AlertTemplate} {...options}>
+    <>
+      <div className="App">
+        {userChecked && (
+          // <Provider template={AlertTemplate} {...options}>
             <RouterProvider router={router} />
-          </Provider>
+          // </Provider>
         )}
-    </div>
+        {/* Link must be inside the Provider */}
+      </div>
+    </>
   );
 }
+
 export default App;
