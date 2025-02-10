@@ -1,7 +1,7 @@
 import NavBar from '../features/navbar/Navbar';
 import UserOrders from '../features/user/components/UserOrders';
 
-export const UserOrdersPage= ()=> {
+ const UserOrdersPage= ()=> {
   return (
     <div>
       <NavBar>
@@ -11,3 +11,4 @@ export const UserOrdersPage= ()=> {
     </div>
   );
 }
+export default UserOrdersPage;
