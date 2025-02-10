@@ -2,7 +2,7 @@ import React from 'react'
 import NavBar from '../features/navbar/Navbar'
 import AdminProductDetail from '../features/admin/components/AdminProductDetail'
 
-export const AdminProductDetailPage = () => {
+const AdminProductDetailPage = () => {
   return (
     <div>
         <NavBar>
@@ -11,3 +11,5 @@ export const AdminProductDetailPage = () => {
     </div>
   )
 }
+
+export default AdminProductDetailPage;
