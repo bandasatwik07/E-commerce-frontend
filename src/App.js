@@ -34,10 +34,10 @@ import AdminOrdersPage from './pages/AdminOrdersPage';
 import StripeCheckout from './pages/StripeCheckout';
 // import ResetPasswordPage from './pages/ResetPasswordPage';
 
-const options = {
-  timeout: 5000,
-  position: positions.BOTTOM_LEFT,
-};
+// const options = {
+//   timeout: 5000,
+//   position: positions.BOTTOM_LEFT,
+// };
 
 const router = createBrowserRouter([
   {
