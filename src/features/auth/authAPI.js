@@ -1,3 +1,5 @@
+
+
 export function createUser(userData) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -20,11 +22,11 @@ export function createUser(userData) {
     }
   });
 }
-
+const BASE_URL = "https://e-commerce-frontend-gjeo.vercel.app/";
 export function loginUser(loginInfo) {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await fetch('auth/login', {
+      const response = await fetch(BASE_URL+'auth/login', {
         method: 'POST',
         body: JSON.stringify(loginInfo),
         headers: { 'content-type': 'application/json' },
