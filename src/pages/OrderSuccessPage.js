@@ -5,7 +5,7 @@ import { resetCartAsync } from '../features/cart/cartSlice';
 import { selectLoggedInUser } from '../features/auth/authSlice';
 import { useEffect } from 'react';
 import { resetOrder } from '../features/order/orderSlice';
-export const OrderSuccessPage = () => {
+const OrderSuccessPage = () => {
     const params= useParams()
     const dispatch = useDispatch();
     
@@ -25,7 +25,7 @@ export const OrderSuccessPage = () => {
                     <p className="text-base font-semibold text-indigo-600">Order Successfully Placed</p>
                     <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">Order Number #{params?.id}</h1>
                     <p className="mt-6 text-base leading-7 text-gray-600">
-                        You can check your order in My account > My Orders
+                        You can check your order in My account - My Orders
 
                     </p>
                     <div className="mt-10 flex items-center justify-center gap-x-6">
@@ -41,3 +41,5 @@ export const OrderSuccessPage = () => {
         </div>
     )
 }
+
+export default OrderSuccessPage;
