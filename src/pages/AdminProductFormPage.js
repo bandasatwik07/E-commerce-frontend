@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from '../features/navbar/Navbar'
 import { ProductForm } from '../features/admin/components/ProductForm'
-export const AdminProductFormPage = () => {
+ const AdminProductFormPage = () => {
   return (
     <div>
         <NavBar>
@@ -10,3 +10,4 @@ export const AdminProductFormPage = () => {
     </div>
   )
 }
+export default AdminProductFormPage;
